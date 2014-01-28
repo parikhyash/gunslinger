@@ -1,0 +1,33 @@
+1. Reshuffle the player
+Every player starts with a random position each game. player.id is assigned randomly each game.
+
+2. Reloading players
+The player is reloaded every time. So do not expect to save information about past games in any static fields in your player. But it also makes your life easier because you do not need to manually reset these fields if you ever use them.
+
+3. Catching exceptions
+It is your responsibility to catch all exceptions thrown by your player. If there is unhandled exception thrown to the simulator, your player will be disqualified from the game. In this particular project, your player will never shoot again.
+
+4. Timeout (IMPORTANT)
+Although in this project, you are unlikely to use a lot of computational resources, but in future projects, youf may. So I add the time limit feature at the first project to help you get familiar with how to handle timeout. Now, timeout is added as a new argument to the program. You can test your player with timeout, so that you know during tournament, how many time you need to find the solution and adjust the complexity of your algorithm accordingly. Currently, the default timeout is 1 second.
+
+In Java, there is no straightforward to gracefully terminate a thread. So here is the mechanism to handle timeout.
+
+For every move, I start your player in a separate thread. I will let your thread run for example 1000 milliseconds, then I will interrupt your thread by calling Thread.interrupt(). This will set a flag in your player thread, but it will not stop your thread from running if you ignore the flag (and actually there is no way in Java you can stop a thread from running). You can treat this flag as a warning that your player is going to timeout. I will give you some additional time, e.g. 100 milliseconds for you to handle this warning. If you choose to ignore it, you will be disqualified from all future rounds. Otherwise, after receiving the warning, you can return a valid, current optimal solution to avoid being disqualified from the game. Your player will be given another full 1000 milliseconds to run in the next round.
+
+What you need to do?
+In your player, put the following check in some loop in your player, and handle it. That's it.
+
+Thread.currentThread().isInterrupted()
+
+Example:
+
+while (isBestSolution(currentSolution)) {
+      currentSolution = findBetterSolution();
+
+      // I am warned of time out
+      // No matter what, I should return something
+      // Otherwise, I am doomed
+      if (Thread.currentThread().isInterrupted()) {
+         return currentSolution;
+      }
+}

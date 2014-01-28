@@ -1,0 +1,12 @@
+Some notes about Eclipse:
+
+1. Create a empty project
+
+2. Copy the entire gunslinger directory (including sim, dumb, g1, g2, ...) into the 'src' directory of your Eclipse project
+3. Refresh the project
+
+4. Change the run configuration of gunslinger.sim
+   1) Change the working directory to {workspace:src}. Set under the Arguments section
+   2) If you have the "Cannot load class loader" exception, check the JRE you are using. You can change it in Alternative JRE under the JRE section. You shall use the one installed with ythe jdk, not the jre.
+
+5. If you have NullPointer exception from void play() in the old simulator. Download the latest simulator. Eclipse is not compatible with System.Console which I used before.
